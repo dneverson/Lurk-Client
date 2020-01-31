@@ -1,0 +1,102 @@
+html,body{
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  max-height: 100%;
+}
+li{
+  list-style-type: none;
+}
+ul{
+  padding-left:5px;
+}
+
+.textWindow{
+  border: 1px solid #ced4da;
+  border-radius: .25rem;
+  height: 16em;
+  overflow: auto;
+  resize: vertical;
+}
+.textWindowGameDesc{
+  border: 1px solid #ced4da;
+  border-radius: .25rem;
+  height: 8em;
+  overflow: auto;
+  resize: vertical;
+}
+
+.btncol{
+  padding: 0 0 0 8px !important;
+  vertical-align: middle !important;
+}
+.tableTwo tr td:last-child{
+  width:1%;
+  white-space:nowrap;
+}
+.tOverflow{
+  max-height: 200px;
+  overflow: auto;
+}
+h1{
+  text-align: center;
+}
+
+.titleSpacing{
+  width: 9em;
+}
+.userSelect{
+  width: 20% !important;
+}
+.userInput{
+  width: 60% !important;
+}
+.userSend{
+  width: 20% !important;
+}
+.roomSelect{
+  width: 70% !important;
+}
+
+.color-blue{
+  background-color: #d9edf7;
+  border-color: #bce8f1;
+  color: #31708f;
+}
+.color-green{
+  background-color: #dff0d8;
+  border-color: #d6e9c6;
+  color: #3c763d;
+}
+.color-grey{
+  background-color: #f1f1f1;
+  border-color: #eaeaea;
+  color: #989898;
+}
+.color-red{
+  background-color: #f2dede ;
+  border-color: #ebccd1 ;
+  color: #a94442 ;
+}
+.color-yellow{
+  background-color: #ffe7be;
+  border-color: #eea236;
+  color: #bf7917;
+}
+
+footer {
+  bottom: 0;
+  left: 0;
+  position: fixed;
+  text-align: center;
+  width: 100%;
+}
+
+@media (max-width: 420px) {
+  footer {
+    display: none;
+  }
+
+}

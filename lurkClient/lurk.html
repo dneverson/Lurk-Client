@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<!--
+/*=========================================================================
+* @author Derry Everson
+* 01/30/2020
+*========================================================================*/
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" ng-app="lurkApp">
+<head>
+  <title>Lurk Client</title>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="PRAGMA" content="NO-CACHE" />
+  <meta http-equiv="CACHE-CONTROL" content="NO-CACHE" />
+  <meta http-equiv="X-UA-Compatible" content="IE=8,IE=9" />
+  <link rel="shortcut icon" href="favicon.png" />
+  <!-- JS -->
+  <script src="js/jquery/3.3.1/jquery.min.js"></script>
+  <script src="js/angularjs/1.7.8/angular.min.js"></script>
+  <script src="js/popper/popper.min.js"></script>
+  <script src="js/bootstrap/4.2.1/bootstrap.min.js"></script>
+  <script src="js/lurk/lurkController.js" type="text/javascript"></script>
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/bootstrap/4.2.1/bootstrap.min.css" />
+  <link rel="stylesheet" href="css/lurk/lurk.css">
+</head>
+
+<body ng-controller="lurkController">
+
+  <!--==== Header ====-->
+  <header>
+    <h1>Lurk Client</h1>
+  </header>
+
+  <!--==== Connection ====-->
+  <div ng-if="data.gameStatus.connect" class="mt-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-6 mt-5">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="address">Address</label>
+            </div> <!-- End of Input Group Prepend -->
+            <input type="text" class="form-control" id="address" placeholder="Address" ng-model="data.connection.address">
+          </div> <!-- End of Input Group -->
+        </div> <!-- End of Col 6 -->
+        <div class="col-sm-6 mt-5">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="port">Port</label>
+            </div> <!-- End of Input Group Prepend -->
+            <input type="number" class="form-control" id="port" placeholder="Address" ng-model="data.connection.port" min="0" max="9000">
+          </div> <!-- End of Input Group -->
+        </div> <!-- End of Col 6 -->
+      </div> <!-- End of Row -->
+      <div class="row">
+        <div class="col-sm-12 text-center mt-4">
+          <button type="button" class="btn btn-primary" ng-click="connect(data.connection.address,data.connection.port)">Connect</button>
+        </div> <!-- End of Col 12 -->
+      </div> <!-- End of Row -->
+    </div> <!-- End of Container -->
+  </div> <!-- End of Ng-If -->
+
+  <!--==== Character Creation ====-->
+  <div ng-if="data.gameStatus.charCreate" ng-init="generateCharacter()">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="form-group">
+            <label for="textWindowMessages"><h4><strong>Game Description:</strong></h4></label>
+            <div class="textWindowGameDesc" id="textWindowMessages">
+              <ul>
+                <li>{{data.gameDesc}}</li>
+              </ul>
+            </div> <!-- End of Text Window -->
+          </div> <!-- End of Form Group -->
+        </div> <!-- End of Col 12 -->
+      </div> <!-- End of Row -->
+
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <label class="input-group-text titleSpacing" for="playerName">Name</label>
+            </div> <!-- End of Input Group Prepend -->
+            <input type="text" class="form-control" id="playerName" placeholder="Name" ng-model="data.player.name">
+          </div> <!-- End of Input Group -->
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <label class="input-group-text titleSpacing" for="playerDescription">Description</label>
+            </div> <!-- End of Input Group Prepend -->
+            <input type="text" class="form-control" id="playerDescription" placeholder="Description" ng-model="data.player.desc">
+          </div> <!-- End of Input Group -->
+        </div> <!-- End of Col 6 -->
+
+        <div class="col-sm-6">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <label class="input-group-text titleSpacing" for="totalPoints">Remaining Pts</label>
+            </div> <!-- End of Input Group Prepend -->
+            <input type="number" class="form-control" id="totalPoints" ng-model="data.player.rPts" readonly>
+          </div> <!-- End of Input Group -->
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <label class="input-group-text titleSpacing" for="attack">Attack:</label>
+            </div> <!-- End of Input Group Prepend -->
+            <input type="number" class="form-control" id="attack" placeholder="0" ng-model="data.player.atk" ng-change="updatePoints()" min="0" max="{{data.player.atk+data.player.rPts}}">
+          </div> <!-- End of Input Group -->
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <label class="input-group-text titleSpacing" for="defence">Defence:</label>
+            </div> <!-- End of Input Group Prepend -->
+            <input type="number" class="form-control" id="defence" placeholder="0" ng-model="data.player.def" ng-change="updatePoints()" min="0" max="{{data.player.def+data.player.rPts}}">
+          </div> <!-- End of Input Group -->
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <label class="input-group-text titleSpacing" for="regeneration">Regeneration:</label>
+            </div> <!-- End of Input Group Prepend -->
+            <input type="number" class="form-control" id="regeneration" placeholder="0" ng-model="data.player.reg" ng-change="updatePoints()" min="0" max="{{data.player.reg+data.player.rPts}}">
+          </div><!-- End of Input Group -->
+        </div> <!-- End of Col 6 -->
+      </div> <!-- End of Row -->
+      <div class="row">
+        <div class="col-sm-12 text-center mt-4">
+          <button type="button" class="btn btn-success" ng-click="startGame(data.player)">Start Game</button>
+        </div> <!-- End of Col 12 -->
+      </div> <!-- End of Row -->
+    </div> <!-- End of Container -->
+  </div> <!-- End of Ng-If -->
+
+  <!--==== Game Play ====-->
+  <div ng-if="data.gameStatus.gamePlay">
+    <div class="container mb-3">
+      <div class="row">
+        <div class="col-sm-4">
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="form-group">
+                <label for="textWindowMessages"><h4><strong>Messages:</strong></h4></label>
+                <div class="textWindow" id="textWindowMessages">
+                  <ul>
+                    <li ng-repeat="unit in data.messages" ng-class="{'color-red': unit.sys == 1}"><strong>{{unit.name}}</strong> {{unit.msg}}</li>
+                  </ul>
+                </div> <!-- End of Text Window -->
+              </div> <!-- End of Form Group -->
+            </div> <!-- End of Col 12 -->
+          </div> <!-- End of Row -->
+
+          <div class="row">
+            <div class="col-sm-12">
+              <form class="form-inline">
+                <select class="custom-select userSelect" id="playerSelect" ng-model="data.playerSelected">
+                  <option selected>All</option>
+                  <option ng-repeat="player in data.players" value="{{player.name}}">{{player.name}}</option>
+                </select>
+                <input type="text" class="form-control userInput" id="userInput" placeholder="Message" ng-model="data.userInput">
+                <button type="button" class="btn btn-primary userSend" ng-click="sendMessage(data.playerSelected, data.userInput)">Send</button>
+              </form>
+            </div> <!-- End ofCol 12 -->
+          </div> <!-- End ofRow -->
+        </div> <!-- End of Col 4 -->
+
+        <div class="col-sm-8">
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="form-group">
+                <label for="textWindowRoom"><h4><strong>Current Room:</strong> {{data.currentRoom.name}}</h4></label>
+                <div class="textWindow" id="textWindowRoom">
+                  <ul>
+                    <li> {{data.currentRoom.desc}}</li>
+                  </ul>
+                </div> <!-- End ofText Window -->
+              </div> <!-- End ofForm Group-->
+            </div> <!-- End ofCol 12 -->
+          </div> <!-- End ofRow -->
+
+          <div class="row">
+            <div class="col-sm-12">
+              <form class="form-inline">
+                <div class="input-group-prepend roomLabel">
+                  <label class="input-group-text" for="inputGroupSelect01">Rooms:</label>
+                </div> <!-- End of Input Group Prepend -->
+                <select class="custom-select roomSelect" id="roomSelect" ng-model="data.roomSelected">
+                  <option ng-repeat="room in data.rooms" value="{{room}}">{{room}}</option>
+                </select>
+                <button type="button" class="btn btn-primary userGoto" ng-click="gotoRoom(data.roomSelected)">Go To</button>
+              </form>
+            </div> <!-- End ofCol 12 -->
+          </div> <!-- End ofRow -->
+        </div> <!-- End of Col 8 -->
+      </div> <!-- End of row -->
+    </div><!-- End of Container-->
+
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-4">
+          <div class="row">
+            <div class="col-sm-12">
+              <h2>Player</h2>
+            </div><!-- End of Col 12 -->
+          </div> <!-- End of Row -->
+          <div class="row">
+            <div class="col-sm-12 tOverflow">
+              <table class="table table-borderless table-hover table-sm tableOne">
+                <tbody>
+                  <tr>
+                    <td><strong>Name:</strong> {{data.player.name}}</td>
+                    <td ng-class="{'color-red': data.player.hp <= 29,'color-yellow': data.player.hp >= 30 && data.player.hp <= 59,'color-green': data.player.hp >= 60}"><strong>HP:</strong> {{data.player.hp}}</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Atk:</strong> {{data.player.atk}}</td>
+                    <td><strong>Def:</strong> {{data.player.def}}</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Reg:</strong> {{data.player.reg}}</td>
+                    <td><strong>Loot:</strong> {{data.player.gold}}gp</td>
+                  </tr>
+                  <tr>
+                    <td colspan="2"><strong>Desc:</strong> {{data.player.desc}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div> <!-- End of Table Col -->
+          </div> <!-- End of Row -->
+        </div> <!-- End of Col 4 -->
+
+        <div class="col-sm-8">
+          <div class="row center">
+            <div class="col-sm-12">
+              <div class="btn-group btn-group-md w-100" role="group" aria-label="..." ng-init="updateTable(2)">
+                <button type="button" class="btn btn-primary" ng-click="updateTable(1)">Players</button>
+                <button type="button" class="btn btn-danger" ng-click="updateTable(2)">Monsters</button>
+                <button type="button" class="btn btn-success" ng-click="updateTable(3)">Loots</button>
+              </div> <!-- End of Btn Group -->
+            </div> <!-- End of Col 12 -->
+          </div> <!-- End of Row -->
+          <div class="row">
+            <div class="col-sm-12 tOverflow">
+              <table class="table table-borderless table-hover table-sm tableTwo">
+                <thead>
+                  <tr>
+                    <th scope="col">{{data.currentTable.name}}</th>
+                    <th scope="col">HP</th>
+                    <th scope="col">Atk</th>
+                    <th scope="col">Def</th>
+                    <th scope="col">Reg</th>
+                    <th scope="col">gold</th>
+                    <th scope="col"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="entity in data.currentTable.entities">
+                    <td>{{entity.name}}</td>
+                    <td ng-class="{'color-red': entity.hp <= 29,'color-yellow': entity.hp >= 30 && entity.hp <= 59,'color-green': entity.hp >= 60}">{{entity.hp}}</td>
+                    <td>{{entity.atk}}</td>
+                    <td>{{entity.def}}</td>
+                    <td>{{entity.reg}}</td>
+                    <td>{{entity.gold}}</td>
+                    <td class="btncol">
+                      <div ng-if="data.currentTable.type == 1"><button type="button" class="btn btn-primary btn-sm" ng-click="pvp(entity)">PvP</button></div>
+                      <div ng-if="data.currentTable.type == 2"><button type="button" class="btn btn-danger btn-sm" ng-click="attack(entity)">Attack</button></div>
+                      <div ng-if="data.currentTable.type == 3"><button type="button" class="btn btn-success btn-sm" ng-click="loot(entity)">Loot</button></div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div> <!-- End of Table Col -->
+          </div> <!-- End of Row -->
+        </div> <!-- End of Col 8 -->
+      </div> <!-- End of Row -->
+    </div> <!-- End of Container -->
+  </div> <!-- End of Ng-If -->
+</body>
+
+<!--==== Footer ====-->
+<footer>
+  <div class="container mb-2">
+    <div class="row">
+      <div class="col-sm-12">
+        <small class="center">All rights reserved. Reprinted with permission of the author solely for educational purposes. May not be modified or used for commercial, marketing, or research purposes without permission of the author.</small>
+      </div> <!-- End ofCol 12 -->
+    </div> <!-- End ofRow -->
+  </div> <!-- End ofContainer -->
+</footer>
+
+</html>
