@@ -2,7 +2,7 @@
 Client with mobile support for Lurk Servers, built in AngularJS.
 
 ### Desktop View:
-![GitHub Logo](/images/lurk.png)
+
 
 
 ### Mobile View:
