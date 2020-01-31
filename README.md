@@ -27,4 +27,4 @@ V1.0
 ![GitHub Logo](/images/lurk_desktop.png)
 
 ### Mobile View:
-![GitHub Logo](/images/lurk_mobile.png)
+![GitHub Logo](/images/lurk_mobile2.png)
