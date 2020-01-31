@@ -1,2 +1,2 @@
 # Lurk-Client
-Client for Lurk built in AngularJS
+Client for Lurk Servers built in AngularJS
