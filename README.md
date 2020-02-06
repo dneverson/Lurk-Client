@@ -1,5 +1,7 @@
 # Lurk-Client
-Client with mobile support for Lurk Servers
+Client with mobile support for Lurk Protocol 
+
+Protocol Documentation: http://isoptera.lcsc.edu/~seth/cs435/lurk_2.2.html
 
 ![GitHub Version](https://img.shields.io/badge/Version-1.0-blue.svg?style=plastic)
 ![GitHub](https://img.shields.io/github/license/dneverson/Lurk-Client.svg?style=plastic)
